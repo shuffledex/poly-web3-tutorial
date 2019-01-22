@@ -4,7 +4,7 @@
 
 - install node: https://nodejs.org
 - install yarn: https://yarnpkg.com/en/docs/install
-- install metamask: https://metamask.io
+- install and set up ganache: https://truffleframework.com/ganache
 
 ## Install dependencies
 
