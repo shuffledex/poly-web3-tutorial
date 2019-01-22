@@ -1,0 +1,29 @@
+{
+  "name": "poly-web3-tutorial",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "clean": "yarn run clean-build-steps && rm -rf dist",
+    "tsc": "./node_modules/.bin/tsc",
+    "babel": "./node_modules/.bin/babel build-tsc --out-dir build-babel --source-maps",
+    "webpack": "webpack && cp public/* dist",
+    "clean-build-steps": "rm -rf build-tsc build-babel",
+    "build": "yarn run clean && yarn run tsc && yarn run babel && yarn run webpack && yarn run clean-build-steps",
+    "start": "node ./node_modules/http-server/bin/http-server dist"
+  },
+  "repository": "git@github.com:shuffledex/poly-web3-tutorial.git",
+  "author": "shuffledex <shuffledex@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "^0.11.1",
+    "truffle-contract": "^4.0.2",
+    "web3": "1.0.0-beta.34"
+  },
+  "devDependencies": {
+    "@types/web3": "^1.0.14",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "typescript": "^3.2.4",
+    "webpack": "^4.29.0"
+  }
+}
