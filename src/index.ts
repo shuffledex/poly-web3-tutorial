@@ -1,14 +1,37 @@
-import { RPCSubprovider, Web3ProviderEngine } from '@0x/subproviders';
-import { Web3Wrapper } from '@0x/web3-wrapper';
+const Web3 = require('web3'); // tslint:disable-line
+import { PolymathRegistryAbi } from './artifacts/PolymathRegistryAbi';
+import { SecurityTokenRegistryAbi } from './artifacts/SecurityTokenRegistryAbi';
+import { PolyTokenAbi } from './artifacts/PolyTokenAbi';
 
 window.addEventListener('load', async () => {
 
-    const providerEngine = new Web3ProviderEngine();
-    providerEngine.addProvider(new RPCSubprovider('http://127.0.0.1:8545'));
-    providerEngine.start();
+    const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
-    const web3Wrapper = new Web3Wrapper(providerEngine);
-    const addresses = await web3Wrapper.getAvailableAddressesAsync();
-    console.log(addresses);
+    if (await web3.eth.net.getId() == 15) {
+        const polymathRegistryAddress = '0x0f3da9b8682a6054300b8c78a0eca5e79d506380';
+        const polymathRegistryAbi = PolymathRegistryAbi.abi;
+        const polymathRegistry = new web3.eth.Contract(polymathRegistryAbi, polymathRegistryAddress);
+        polymathRegistry.setProvider(web3.currentProvider)
+
+        const securityTokenRegistryAddress = await polymathRegistry.methods.getAddress("SecurityTokenRegistry").call();;
+        const securityTokenRegistryABI = SecurityTokenRegistryAbi.abi;
+        const securityTokenRegistry = new web3.eth.Contract(securityTokenRegistryABI, securityTokenRegistryAddress);
+        securityTokenRegistry.setProvider(web3.currentProvider);
+
+        let polytokenAddress = await polymathRegistry.methods.getAddress("PolyToken").call();
+        let polytokenABI = PolyTokenAbi.abi;
+        let polyToken = new web3.eth.Contract(polytokenABI, polytokenAddress);
+        polyToken.setProvider(web3.currentProvider);
+
+        // Check if the selected ticker is available
+        const TOKEN_SYMBOL = "TEST";
+        const details = await securityTokenRegistry.methods.getTickerDetails(TOKEN_SYMBOL).call();
+        // If available, it returns 0 for the registration date
+        if (parseInt(details[1]) === 0) {
+            alert(TOKEN_SYMBOL + " is available")
+        } else {
+            alert(TOKEN_SYMBOL + " is not available")
+        }
+    }
 
 });
