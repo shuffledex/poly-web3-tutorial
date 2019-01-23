@@ -1,9 +1,7 @@
 ## poly-web3-tutorial
 
 ## Requeriments
-- Create directory
-- cd into that directory
-- git clone into the directory 
+- git clone into a new directory 
 - cd into poly-web3-tutorial
 - install node: https://nodejs.org
 - install yarn: https://yarnpkg.com/en/docs/install
