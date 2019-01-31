@@ -1,17 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>POLY <> Web3 Tutorial</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bignumber.js/6.0.0/bignumber.min.js"></script>
-  </head>
+<head>
 
-  <body>
+  <meta charset="utf-8">
+  <title>POLY <> Web3 Tutorial</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <h2>Polymath code samples</h2>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="./bundle.js"></script>
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 
-  </body>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/getskeleton@2.0.4-2/lib/css/normalize.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/getskeleton@2.0.4-2/lib/css/skeleton.css">
+
+</head>
+<body>
+
+  <div class="container">
+    <div class="row" style="text-align: center">
+      <img src="bull.jpg" alt="Polymath" />
+    </div>
+    <div class="row">
+      <div class="one-half column" style="text-align: right">
+        <h4>First, check if your ticker symbol is available</h4>
+      </div>
+      <div class="one-half column">
+        <form>
+          <div class="row">
+            <div class="six columns">
+              <label for="ticker">Ticker symbol</label>
+              <input class="u-full-width" type="text" placeholder="TORO" id="ticker">
+            </div>
+            <div class="six columns">
+              <button class="button-primary" id="check" style="margin-top: 29px" onclick="App.checkSymbol();return false;">Check</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row" style="text-align: center">
+      <h5 id="msgCheck" style="color: cornflowerblue; font-weight: bold;"></h5>
+    </div>
+  </div>
+
+  <script src="./bundle.js"></script>
+</body>
 </html>

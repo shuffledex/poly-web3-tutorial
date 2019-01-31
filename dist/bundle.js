@@ -1187,74 +1187,185 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Web3 = __webpack_require__(/*! web3 */ "./node_modules/web3/src/index.js"); // tslint:disable-line
 var PolymathRegistryAbi_1 = __webpack_require__(/*! ./artifacts/PolymathRegistryAbi */ "./build-babel/artifacts/PolymathRegistryAbi.js");
 var SecurityTokenRegistryAbi_1 = __webpack_require__(/*! ./artifacts/SecurityTokenRegistryAbi */ "./build-babel/artifacts/SecurityTokenRegistryAbi.js");
 var PolyTokenAbi_1 = __webpack_require__(/*! ./artifacts/PolyTokenAbi */ "./build-babel/artifacts/PolyTokenAbi.js");
-window.addEventListener('load', (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-    var web3, polymathRegistryAddress, polymathRegistryAbi, polymathRegistry, securityTokenRegistryAddress, securityTokenRegistryABI, securityTokenRegistry, polytokenAddress, polytokenABI, polyToken, TOKEN_SYMBOL, details;
-    return _regenerator2.default.wrap(function _callee$(_context) {
+var Web3 = __webpack_require__(/*! web3 */ "./node_modules/web3/src/index.js"); // tslint:disable-line
+/**
+ * Please modify this constant with your own local Polymaty Registry address
+ */
+var REGISTRY_ADDRESS = '0x0f3da9b8682a6054300b8c78a0eca5e79d506380';
+var polymathRegistry = void 0,
+    securityTokenRegistry = void 0,
+    polyToken = void 0,
+    w3 = void 0;
+window.App = {
+    web3: function web3() {
+        return new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+    },
+    registryConnect: function registryConnect() {
+        var polymathRegistryAddress = REGISTRY_ADDRESS;
+        var polymathRegistryAbi = PolymathRegistryAbi_1.PolymathRegistryAbi.abi;
+        var polymathRegistry = new w3.eth.Contract(polymathRegistryAbi, polymathRegistryAddress);
+        polymathRegistry.setProvider(w3.currentProvider);
+        return polymathRegistry;
+    },
+    securityTokenRegistryConnect: function () {
+        var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+            var securityTokenRegistryAddress, securityTokenRegistryABI, securityTokenRegistry;
+            return _regenerator2.default.wrap(function _callee$(_context) {
+                while (1) {
+                    switch (_context.prev = _context.next) {
+                        case 0:
+                            _context.next = 2;
+                            return polymathRegistry.methods.getAddress("SecurityTokenRegistry").call();
+
+                        case 2:
+                            securityTokenRegistryAddress = _context.sent;
+
+                            ;
+                            securityTokenRegistryABI = SecurityTokenRegistryAbi_1.SecurityTokenRegistryAbi.abi;
+                            securityTokenRegistry = new w3.eth.Contract(securityTokenRegistryABI, securityTokenRegistryAddress);
+
+                            securityTokenRegistry.setProvider(w3.currentProvider);
+                            return _context.abrupt("return", securityTokenRegistry);
+
+                        case 8:
+                        case "end":
+                            return _context.stop();
+                    }
+                }
+            }, _callee, undefined);
+        }));
+
+        function securityTokenRegistryConnect() {
+            return _ref.apply(this, arguments);
+        }
+
+        return securityTokenRegistryConnect;
+    }(),
+    polytokenConnect: function () {
+        var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
+            var polytokenAddress, polytokenABI, polyToken;
+            return _regenerator2.default.wrap(function _callee2$(_context2) {
+                while (1) {
+                    switch (_context2.prev = _context2.next) {
+                        case 0:
+                            _context2.next = 2;
+                            return polymathRegistry.methods.getAddress("PolyToken").call();
+
+                        case 2:
+                            polytokenAddress = _context2.sent;
+                            polytokenABI = PolyTokenAbi_1.PolyTokenAbi.abi;
+                            polyToken = new w3.eth.Contract(polytokenABI, polytokenAddress);
+
+                            polyToken.setProvider(w3.currentProvider);
+                            return _context2.abrupt("return", polyToken);
+
+                        case 7:
+                        case "end":
+                            return _context2.stop();
+                    }
+                }
+            }, _callee2, undefined);
+        }));
+
+        function polytokenConnect() {
+            return _ref2.apply(this, arguments);
+        }
+
+        return polytokenConnect;
+    }(),
+    checkSymbol: function () {
+        var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3() {
+            var symbol, result;
+            return _regenerator2.default.wrap(function _callee3$(_context3) {
+                while (1) {
+                    switch (_context3.prev = _context3.next) {
+                        case 0:
+                            document.getElementById('msgCheck').innerText = "Checking ticker symbol in local blockchain...";
+                            document.getElementById('check').disabled = true;
+                            symbol = document.getElementById('ticker').value;
+                            _context3.next = 5;
+                            return securityTokenRegistry.methods.getTickerDetails(symbol).call();
+
+                        case 5:
+                            result = _context3.sent;
+
+                            document.getElementById('check').disabled = false;
+                            if (parseInt(result[1]) === 0) {
+                                document.getElementById('msgCheck').innerText = symbol + " is available";
+                            } else {
+                                document.getElementById('msgCheck').innerText = symbol + " is not available";
+                            }
+
+                        case 8:
+                        case "end":
+                            return _context3.stop();
+                    }
+                }
+            }, _callee3, undefined);
+        }));
+
+        function checkSymbol() {
+            return _ref3.apply(this, arguments);
+        }
+
+        return checkSymbol;
+    }()
+};
+window.addEventListener('load', (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4() {
+    var web3;
+    return _regenerator2.default.wrap(function _callee4$(_context4) {
         while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context4.prev = _context4.next) {
                 case 0:
+                    _context4.prev = 0;
                     web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-                    _context.next = 3;
+                    _context4.next = 4;
                     return web3.eth.net.getId();
 
-                case 3:
-                    _context.t0 = _context.sent;
+                case 4:
+                    _context4.t0 = _context4.sent;
 
-                    if (!(_context.t0 == 15)) {
-                        _context.next = 27;
+                    if (!(_context4.t0 == 15)) {
+                        _context4.next = 14;
                         break;
                     }
 
-                    polymathRegistryAddress = '0x0f3da9b8682a6054300b8c78a0eca5e79d506380';
-                    polymathRegistryAbi = PolymathRegistryAbi_1.PolymathRegistryAbi.abi;
-                    polymathRegistry = new web3.eth.Contract(polymathRegistryAbi, polymathRegistryAddress);
-
-                    polymathRegistry.setProvider(web3.currentProvider);
-                    _context.next = 11;
-                    return polymathRegistry.methods.getAddress("SecurityTokenRegistry").call();
-
-                case 11:
-                    securityTokenRegistryAddress = _context.sent;
-
-                    ;
-                    securityTokenRegistryABI = SecurityTokenRegistryAbi_1.SecurityTokenRegistryAbi.abi;
-                    securityTokenRegistry = new web3.eth.Contract(securityTokenRegistryABI, securityTokenRegistryAddress);
-
-                    securityTokenRegistry.setProvider(web3.currentProvider);
-                    _context.next = 18;
-                    return polymathRegistry.methods.getAddress("PolyToken").call();
-
-                case 18:
-                    polytokenAddress = _context.sent;
-                    polytokenABI = PolyTokenAbi_1.PolyTokenAbi.abi;
-                    polyToken = new web3.eth.Contract(polytokenABI, polytokenAddress);
-
-                    polyToken.setProvider(web3.currentProvider);
-                    // Check if the selected ticker is available
-                    TOKEN_SYMBOL = "TEST";
-                    _context.next = 25;
-                    return securityTokenRegistry.methods.getTickerDetails(TOKEN_SYMBOL).call();
-
-                case 25:
-                    details = _context.sent;
-
-                    // If available, it returns 0 for the registration date
-                    if (parseInt(details[1]) === 0) {
-                        alert(TOKEN_SYMBOL + " is available");
-                    } else {
-                        alert(TOKEN_SYMBOL + " is not available");
+                    try {
+                        w3 = window.App.web3();
+                    } catch (e) {
+                        console.log('ERROR', e);
                     }
+                    polymathRegistry = window.App.registryConnect();
+                    _context4.next = 10;
+                    return window.App.securityTokenRegistryConnect();
 
-                case 27:
+                case 10:
+                    securityTokenRegistry = _context4.sent;
+                    _context4.next = 13;
+                    return window.App.polytokenConnect();
+
+                case 13:
+                    polyToken = _context4.sent;
+
+                case 14:
+                    _context4.next = 19;
+                    break;
+
+                case 16:
+                    _context4.prev = 16;
+                    _context4.t1 = _context4["catch"](0);
+
+                    console.log('ERROR', _context4.t1);
+
+                case 19:
                 case "end":
-                    return _context.stop();
+                    return _context4.stop();
             }
         }
-    }, _callee, undefined);
+    }, _callee4, undefined, [[0, 16]]);
 })));
 //# sourceMappingURL=index.js.map
 
