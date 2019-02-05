@@ -19,6 +19,9 @@
 
   <div class="container">
     <div class="row" style="text-align: center">
+      <h5 style="font-weight: bold; margin-top: 15px">Register ticker</h5>
+    </div>
+    <div class="row" style="text-align: center">
       <img src="bull.jpg" alt="Polymath" />
     </div>
     <div class="row">
@@ -30,7 +33,7 @@
           <div class="row">
             <div class="six columns">
               <label for="ticker">Ticker symbol</label>
-              <input class="u-full-width" type="text" placeholder="TORO" id="ticker">
+              <input class="u-full-width" type="text" placeholder="TORO" onkeypress="App.keyPress()" id="ticker">
             </div>
             <div class="six columns">
               <button class="button-primary" id="check" style="margin-top: 29px" onclick="App.checkSymbol();return false;">Check</button>
@@ -40,7 +43,10 @@
       </div>
     </div>
     <div class="row" style="text-align: center">
-      <h5 id="msgCheck" style="color: cornflowerblue; font-weight: bold;"></h5>
+      <h5 id="msgCheck" style="font-weight: bold;"></h5>
+    </div>
+    <div class="row" id="registerWrapper" style="display: none;">
+      <button class="button-primary u-full-width" id="register" style="margin-top: 29px" onclick="App.registerSymbol();return false;"></button>
     </div>
   </div>
 

@@ -1190,7 +1190,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var PolymathRegistryAbi_1 = __webpack_require__(/*! ./artifacts/PolymathRegistryAbi */ "./build-babel/artifacts/PolymathRegistryAbi.js");
 var SecurityTokenRegistryAbi_1 = __webpack_require__(/*! ./artifacts/SecurityTokenRegistryAbi */ "./build-babel/artifacts/SecurityTokenRegistryAbi.js");
 var PolyTokenAbi_1 = __webpack_require__(/*! ./artifacts/PolyTokenAbi */ "./build-babel/artifacts/PolyTokenAbi.js");
-var Web3 = __webpack_require__(/*! web3 */ "./node_modules/web3/src/index.js"); // tslint:disable-line
+var Web3 = __webpack_require__(/*! web3 */ "./node_modules/web3/src/index.js");
 /**
  * Please modify this constant with your own local Polymaty Registry address
  */
@@ -1198,7 +1198,8 @@ var REGISTRY_ADDRESS = '0x0f3da9b8682a6054300b8c78a0eca5e79d506380';
 var polymathRegistry = void 0,
     securityTokenRegistry = void 0,
     polyToken = void 0,
-    w3 = void 0;
+    w3 = void 0,
+    account = void 0;
 window.App = {
     web3: function web3() {
         return new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
@@ -1283,7 +1284,7 @@ window.App = {
                 while (1) {
                     switch (_context3.prev = _context3.next) {
                         case 0:
-                            document.getElementById('msgCheck').innerText = "Checking ticker symbol in local blockchain...";
+                            document.getElementById('msgCheck').innerText = "Checking ticker symbol in blockchain...";
                             document.getElementById('check').disabled = true;
                             symbol = document.getElementById('ticker').value;
                             _context3.next = 5;
@@ -1293,13 +1294,28 @@ window.App = {
                             result = _context3.sent;
 
                             document.getElementById('check').disabled = false;
-                            if (parseInt(result[1]) === 0) {
-                                document.getElementById('msgCheck').innerText = symbol + " is available";
-                            } else {
-                                document.getElementById('msgCheck').innerText = symbol + " is not available";
+
+                            if (!(parseInt(result[1]) === 0)) {
+                                _context3.next = 15;
+                                break;
                             }
 
-                        case 8:
+                            document.getElementById('msgCheck').innerText = symbol + " is available. You can register it now!";
+                            document.getElementById('registerWrapper').style.display = "block";
+                            document.getElementById('msgCheck').style.color = "cornflowerblue";
+                            _context3.next = 13;
+                            return window.App.getBalanceOf();
+
+                        case 13:
+                            _context3.next = 18;
+                            break;
+
+                        case 15:
+                            document.getElementById('msgCheck').innerText = symbol + " is not available. Try another symbol.";
+                            document.getElementById('registerWrapper').style.display = "none";
+                            document.getElementById('msgCheck').style.color = "red";
+
+                        case 18:
                         case "end":
                             return _context3.stop();
                     }
@@ -1312,24 +1328,91 @@ window.App = {
         }
 
         return checkSymbol;
+    }(),
+    keyPress: function keyPress() {
+        document.getElementById('registerWrapper').style.display = "none";
+    },
+    getBalanceOf: function () {
+        var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4() {
+            var polyBalance, polyBalanceInEth, fee, feeInEth;
+            return _regenerator2.default.wrap(function _callee4$(_context4) {
+                while (1) {
+                    switch (_context4.prev = _context4.next) {
+                        case 0:
+                            _context4.next = 2;
+                            return polyToken.methods.balanceOf(account).call();
+
+                        case 2:
+                            polyBalance = _context4.sent;
+                            polyBalanceInEth = w3.utils.fromWei(polyBalance);
+                            _context4.next = 6;
+                            return securityTokenRegistry.methods.getTickerRegistrationFee().call();
+
+                        case 6:
+                            fee = _context4.sent;
+                            feeInEth = w3.utils.fromWei(fee);
+
+                            if (parseInt(polyBalanceInEth) < parseInt(feeInEth)) {
+                                document.getElementById('register').disabled = true;
+                                document.getElementById('register').innerText = "You need " + feeInEth + " POLY for execute this action.";
+                            } else {
+                                document.getElementById('register').disabled = false;
+                                document.getElementById('register').innerText = "Register Symbol (you will pay " + feeInEth + " POLY)";
+                            }
+
+                        case 9:
+                        case "end":
+                            return _context4.stop();
+                    }
+                }
+            }, _callee4, undefined);
+        }));
+
+        function getBalanceOf() {
+            return _ref4.apply(this, arguments);
+        }
+
+        return getBalanceOf;
+    }(),
+    registerSymbol: function () {
+        var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5() {
+            return _regenerator2.default.wrap(function _callee5$(_context5) {
+                while (1) {
+                    switch (_context5.prev = _context5.next) {
+                        case 0:
+                            alert("signing transaction here");
+
+                        case 1:
+                        case "end":
+                            return _context5.stop();
+                    }
+                }
+            }, _callee5, undefined);
+        }));
+
+        function registerSymbol() {
+            return _ref5.apply(this, arguments);
+        }
+
+        return registerSymbol;
     }()
 };
-window.addEventListener('load', (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4() {
+window.addEventListener('load', (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee7() {
     var web3;
-    return _regenerator2.default.wrap(function _callee4$(_context4) {
+    return _regenerator2.default.wrap(function _callee7$(_context7) {
         while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context7.prev = _context7.next) {
                 case 0:
-                    _context4.prev = 0;
+                    _context7.prev = 0;
                     web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-                    _context4.next = 4;
+                    _context7.next = 4;
                     return web3.eth.net.getId();
 
                 case 4:
-                    _context4.t0 = _context4.sent;
+                    _context7.t0 = _context7.sent;
 
-                    if (!(_context4.t0 == 15)) {
-                        _context4.next = 14;
+                    if (!(_context7.t0 == 15)) {
+                        _context7.next = 8;
                         break;
                     }
 
@@ -1338,34 +1421,72 @@ window.addEventListener('load', (0, _asyncToGenerator3.default)( /*#__PURE__*/_r
                     } catch (e) {
                         console.log('ERROR', e);
                     }
-                    polymathRegistry = window.App.registryConnect();
-                    _context4.next = 10;
-                    return window.App.securityTokenRegistryConnect();
+                    w3.eth.getAccounts(function () {
+                        var _ref7 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee6(err, accounts) {
+                            return _regenerator2.default.wrap(function _callee6$(_context6) {
+                                while (1) {
+                                    switch (_context6.prev = _context6.next) {
+                                        case 0:
+                                            if (!(err != null)) {
+                                                _context6.next = 3;
+                                                break;
+                                            }
 
-                case 10:
-                    securityTokenRegistry = _context4.sent;
-                    _context4.next = 13;
-                    return window.App.polytokenConnect();
+                                            alert("There was an error fetching your accounts.");
+                                            return _context6.abrupt("return");
 
-                case 13:
-                    polyToken = _context4.sent;
+                                        case 3:
+                                            if (!(accounts.length == 0)) {
+                                                _context6.next = 6;
+                                                break;
+                                            }
 
-                case 14:
-                    _context4.next = 19;
+                                            alert("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
+                                            return _context6.abrupt("return");
+
+                                        case 6:
+                                            account = accounts[0];
+                                            polymathRegistry = window.App.registryConnect();
+                                            _context6.next = 10;
+                                            return window.App.securityTokenRegistryConnect();
+
+                                        case 10:
+                                            securityTokenRegistry = _context6.sent;
+                                            _context6.next = 13;
+                                            return window.App.polytokenConnect();
+
+                                        case 13:
+                                            polyToken = _context6.sent;
+
+                                        case 14:
+                                        case "end":
+                                            return _context6.stop();
+                                    }
+                                }
+                            }, _callee6, undefined);
+                        }));
+
+                        return function (_x, _x2) {
+                            return _ref7.apply(this, arguments);
+                        };
+                    }());
+
+                case 8:
+                    _context7.next = 13;
                     break;
 
-                case 16:
-                    _context4.prev = 16;
-                    _context4.t1 = _context4["catch"](0);
+                case 10:
+                    _context7.prev = 10;
+                    _context7.t1 = _context7["catch"](0);
 
-                    console.log('ERROR', _context4.t1);
+                    console.log('ERROR', _context7.t1);
 
-                case 19:
+                case 13:
                 case "end":
-                    return _context4.stop();
+                    return _context7.stop();
             }
         }
-    }, _callee4, undefined, [[0, 16]]);
+    }, _callee7, undefined, [[0, 10]]);
 })));
 //# sourceMappingURL=index.js.map
 
